@@ -186,7 +186,7 @@ class AuthApi(APIView):
 
         controlling_ip = get_client_ip(request)
 
-        if 'token' not in request.data or request.data == 0:
+        if 'token' not in request.data or request.data['token'] < 1:
             token = None
         else:
             token = AccessToken(token=request.data['token'])
