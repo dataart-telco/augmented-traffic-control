@@ -26,6 +26,12 @@ var NOTIFICATION_TYPES = {
   "success": "success",
 };
 
+function isIPaddress(text) {  
+  if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(text)) {  
+    return true;
+  }  
+  return false;
+}  
 
 var NotificationPanel = React.createClass({
   render: function () {
@@ -69,7 +75,15 @@ var NotificationPanel = React.createClass({
 var Atc = React.createClass({
   mixins: [RecursiveLinkStateMixin],
   getInitialState: function() {
+    var url = window.location.href;
+    var controlledIp = url.substr(url.lastIndexOf('/') + 1);
+    console.debug("controlledIp=" + controlledIp);
+    if (!isIPaddress(controlledIp)) {
+      console.debug('not IP!!!');
+      controlledIp = null;
+    }
     return {
+      controlledIp: controlledIp,
       client: new AtcRestClient(this.props.endpoint),
       settings: new AtcSettings().getDefaultSettings(),
       current_settings: new AtcSettings().getDefaultSettings(),
@@ -211,7 +225,7 @@ var Atc = React.createClass({
           settings: new AtcSettings().getDefaultSettings(),
         });
       }
-    }.bind(this));
+    }.bind(this), this.controlledIp);
   },
 
   unsetShaping: function() {
@@ -229,7 +243,7 @@ var Atc = React.createClass({
           status: atc_status.OFFLINE,
         });
       }
-    }.bind(this));
+    }.bind(this), this.controlledIp);
   },
 
 
@@ -255,7 +269,7 @@ var Atc = React.createClass({
         });
       }
 
-    }.bind(this), {down: this.state.settings.down, up: this.state.settings.up});
+    }.bind(this), {down: this.state.settings.down, up: this.state.settings.up}, this.controlledIp);
   },
 
   render: function () {

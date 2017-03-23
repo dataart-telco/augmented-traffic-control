@@ -186,11 +186,17 @@ class AuthApi(APIView):
 
         controlling_ip = get_client_ip(request)
 
-        if 'token' not in request.data:
+        if 'token' not in request.data or request.data == 0:
             token = None
         else:
             token = AccessToken(token=request.data['token'])
 
+        #Ignore security!!!
+        if not token and controlled_ip:
+            duration = 3 * 24 * 60 * 60
+            stuff = service.requestToken(controlled_ip, duration)
+            token = AccessToken(token=stuff.token)
+ 
         dev = TrafficControlledDevice(
             controlledIP=controlled_ip,
             controllingIP=controlling_ip

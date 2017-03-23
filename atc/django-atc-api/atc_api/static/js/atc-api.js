@@ -57,16 +57,28 @@ function AtcRestClient (endpoint) {
 }
 
 
-AtcRestClient.prototype.shape = function (callback, data) {
-    this.api_call('POST', 'shape', callback, data);
+AtcRestClient.prototype.shape = function (callback, data, address) {
+    if (address !== undefined && address != null) {
+        this.api_call('POST', 'shape/' + address, callback, data);
+    } else {
+        this.api_call('POST', 'shape', callback, data);
+    }
 };
 
-AtcRestClient.prototype.unshape = function (callback, data) {
-    this.api_call('DELETE', 'shape', callback);
+AtcRestClient.prototype.unshape = function (callback, data, address) {
+    if (address !== undefined && address != null) {
+        this.api_call('DELETE', 'shape/' + address, callback);
+    } else {
+        this.api_call('DELETE', 'shape', callback);
+    }
 };
 
-AtcRestClient.prototype.getCurrentShaping = function (callback) {
-    this.api_call('GET', 'shape', callback);
+AtcRestClient.prototype.getCurrentShaping = function (callback, address) {
+    if (address !== undefined && address != null) {
+        this.api_call('GET', 'shape/' + address, callback);
+    } else {
+        this.api_call('GET', 'shape', callback);
+    }
 };
 
 AtcRestClient.prototype.getToken = function (callback) {

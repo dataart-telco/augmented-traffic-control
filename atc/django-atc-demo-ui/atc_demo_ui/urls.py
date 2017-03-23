@@ -12,5 +12,5 @@ from atc_demo_ui.views import index
 
 
 urlpatterns = [
-    url(r'^$', index, name='atc-demo-ui-index'),
+    url(r'^.*$', index, name='atc-demo-ui-index'),
 ]
